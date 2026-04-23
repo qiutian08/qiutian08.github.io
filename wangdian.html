@@ -1,0 +1,534 @@
+﻿<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>蔷薇誓约 · Lolita梦幻衣橱</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Quicksand', 'Segoe UI', sans-serif;
+      background: #fef4f7;
+      color: #4a2c3a;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 26px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #b34b6e, #d66e8e);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .logo i {
+      color: #d96c8e;
+    }
+    .search-box {
+      display: flex;
+      background: white;
+      border-radius: 60px;
+      padding: 4px 4px 4px 20px;
+      box-shadow: 0 4px 12px rgba(200, 100, 130, 0.1);
+      border: 1px solid #fec7d7;
+      max-width: 400px;
+    }
+    .search-box input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      background: transparent;
+      padding: 10px 0;
+    }
+    .search-box button {
+      background: #e67997;
+      border: none;
+      color: white;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    .bar {
+      display: flex;
+      justify-content: space-between;
+      margin: 16px 0;
+      color: #b35874;
+    }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 22px;
+    }
+    .product-card {
+      background: white;
+      border-radius: 24px;
+      padding: 16px;
+      box-shadow: 0 8px 18px #fbd7e3;
+      transition: 0.2s;
+      border: 1px solid #ffe1eb;
+      cursor: pointer;
+    }
+    .product-card:hover {
+      transform: translateY(-4px);
+    }
+    .product-img {
+      width: 100%;
+      aspect-ratio: 1/1.1;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .product-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .product-code {
+      font-size: 12px;
+      color: #b18190;
+      margin-bottom: 4px;
+    }
+    .product-title {
+      font-weight: 700;
+      font-size: 17px;
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .tags {
+      margin-bottom: 8px;
+    }
+    .tag {
+      display: inline-block;
+      background: #ffecf1;
+      color: #b85470;
+      font-size: 11px;
+      padding: 3px 7px;
+      border-radius: 10px;
+      margin: 0 3px 4px 0;
+    }
+    .product-price {
+      font-size: 20px;
+      font-weight: 700;
+      color: #cf4f74;
+    }
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      color: #b58d9b;
+      font-size: 14px;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.3);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+    .modal-content {
+      background: white;
+      max-width: 500px;
+      width: 90%;
+      border-radius: 30px;
+      padding: 30px;
+      position: relative;
+      animation: fade 0.2s;
+    }
+    @keyframes fade {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .close {
+      position: absolute;
+      right: 20px; top: 20px;
+      font-size: 24px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #999;
+    }
+    .modal-img {
+      width: 100%;
+      aspect-ratio: 1/1;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .modal-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .modal-code {
+      font-size: 14px;
+      color: #999;
+      margin-bottom: 6px;
+    }
+    .modal-title {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .modal-tags {
+      margin-bottom: 16px;
+    }
+    .modal-tag {
+      display: inline-block;
+      background: #fce4ed;
+      color: #a83f61;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      margin: 0 6px 6px 0;
+    }
+    .modal-desc {
+      line-height: 1.6;
+      margin: 14px 0;
+      color: #666;
+    }
+    .modal-price {
+      font-size: 24px;
+      color: #cf4f74;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    .size-select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 14px;
+      border: 1px solid #ddd;
+      margin: 10px 0 16px;
+    }
+    .add-cart {
+      width: 100%;
+      background: #d96c8e;
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 100px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* 购物车 */
+    .cart-bar {
+      background: #fff;
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 12px #fbd7e3;
+      border: 1px solid #ffe1eb;
+    }
+    .cart-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #b34b6e;
+      margin-bottom: 12px;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px dashed #f8d5e2;
+    }
+    .cart-name { flex:1; }
+    .cart-size {
+      color: #999;
+      font-size: 12px;
+      margin-left: 6px;
+    }
+    .cart-quantity {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cart-quantity button {
+      width: 24px; height:24px;
+      border-radius:50%;
+      border:none;
+      background: #fce4ed;
+      color: #b34b6e;
+      cursor: pointer;
+    }
+    .cart-total {
+      text-align: right;
+      margin-top:12px;
+      font-size:18px;
+      font-weight:600;
+      color: #cf4f74;
+    }
+    .checkout-btn {
+      background: #cf4f74;
+      color: #fff;
+      border:none;
+      padding:10px 20px;
+      border-radius:12px;
+      cursor:pointer;
+      margin-top:10px;
+      float:right;
+    }
+    .clearfix::after {
+      content: ""; display: block; clear: both;
+    }
+
+    /* 分页样式（新增）*/
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 30px 0;
+    }
+    .page-btn {
+      padding: 8px 14px;
+      border-radius: 10px;
+      border: 1px solid #f2a2c0;
+      background: white;
+      color: #b34b6e;
+      cursor: pointer;
+    }
+    .page-btn.active {
+      background: #e67997;
+      color: white;
+      border-color: #e67997;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">
+        <i class="fas fa-crown"></i> 蔷薇誓约Lolita·梦幻衣橱
+      </div>
+      <div class="search-box">
+        <input type="text" id="search" placeholder="搜索商品">
+        <button id="searchBtn"><i class="fas fa-search"></i></button>
+      </div>
+    </div>
+
+    <div class="cart-bar" id="cartBar">
+      <div class="cart-title"><i class="fas fa-shopping-bag"></i> 购物车</div>
+      <div id="cartList"></div>
+      <div class="cart-total" id="cartTotal">合计：¥0</div>
+      <button class="checkout-btn" id="checkoutBtn">结算下单</button>
+      <div class="clearfix"></div>
+    </div>
+
+    <div class="bar">
+      <span id="count">9 件梦幻单品</span>
+    </div>
+
+    <div class="product-grid" id="productGrid"></div>
+
+    <!-- 分页按钮（新增）-->
+    <div class="pagination" id="pagination"></div>
+
+    <div class="footer">
+      <i class="fas fa-heart" style="color:#e07c9a;"></i> @2026 蔷薇誓约 · 少女的梦幻衣橱 | 品牌入驻 | 帮助中心 | 关于我们 <i class="fas fa-heart" style="color:#e07c9a;"></i>
+    </div>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="modal-content">
+      <button class="close" id="closeModal">&times;</button>
+      <div class="modal-img" id="modalImg"></div>
+      <div class="modal-code" id="modalCode"></div>
+      <div class="modal-title" id="modalTitle"></div>
+      <div class="modal-tags" id="modalTags"></div>
+      <div class="modal-desc" id="modalDesc"></div>
+      <div class="modal-price" id="modalPrice"></div>
+      <select class="size-select" id="modalSize"></select>
+      <button class="add-cart" id="addCartBtn">加入购物车</button>
+    </div>
+  </div>
+
+<script>
+  const productsData = [
+    { id:1, code:"NO.1", title:"星夜花嫁jsk", tags:["花嫁","cla系","现货"], price:568, stock:15, sizes:["S","M","L"], img:"1.jpg", desc:"重工刺绣，古典玩偶。" },
+    { id:2, code:"NO.2", title:"草莓奶冻op", tags:["甜美","夏日","现货"], price:288, stock:9, sizes:["S","M"], img:"2.jpg" , desc:"元气草莓印花，夏日必备。" },
+    { id:3, code:"NO.3", title:"云端梦境裙", tags:["优雅","云朵渐变","重工刺绣"], price:328, stock:4, sizes:["M","L"], img:"3.jpg" , desc:"云端梦境，渐变云朵，优雅神秘。" },
+    { id:4, code:"NO.4", title:"暗夜玫瑰op", tags:["优雅暗黑","华丽复古","氛围感"], price:398, stock:5, sizes:["S","M"], img:"4.jpg" , desc:"哥特暗黑风格，立体玫瑰与荆棘刺绣。" },
+    { id:5, code:"NO.5", title:"荆棘古堡裙", tags:["荆棘刺绣","教堂印花","暗纹提花"], price:428, stock:3, sizes:["M","L"], img:"5.jpg" , desc:"暗纹提花面料，裙摆绘有月光下的荆棘古堡。" },
+    { id:6, code:"NO.6", title:"黑天鹅简约", tags:["细闪星纱","暗纹蕾丝","少量现货"], price:358, stock:7, sizes:["S","M","L"], img:"6.jpg" , desc:"极简黑色提花面料，微光下浮现暗纹。" },
+    { id:7, code:"NO.7", title:"复古茶会jsk", tags:["重工","生成色","正式茶会款"], price:458, stock:4, sizes:["M","L"], img:"7.jpg" , desc:"裙摆蕾丝拼接，优雅入骨。" },
+    { id:8, code:"NO.8", title:"宫廷礼赞op", tags:["古典宫廷风","重工刺绣","金线提花"], price:498, stock:2, sizes:["L","XL"], img:"8.jpg" , desc:"重工刺绣帝政风古典连衣裙" },
+    { id:9, code:"NO.9", title:"月光奏鸣曲", tags:["华丽","音乐柄","月光女神"], price:388, stock:8, sizes:["S","M","L"], img:"9.jpg" , desc:"重工蕾丝，夜之乐章。" }
+  ];
+
+    let cart = [];
+    let currentPage = 1;
+  const pageSize = 4; // 每页4件，自动生成3页
+
+  const grid = document.getElementById('productGrid');
+  const modal = document.getElementById('modal');
+  const closeModal = document.getElementById('closeModal');
+  const cartList = document.getElementById('cartList');
+  const cartTotal = document.getElementById('cartTotal');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+  const pagination = document.getElementById('pagination');
+
+    // 渲染商品（带分页）
+    function render() {
+      const key = document.getElementById('search').value.toLowerCase();
+      const list = productsData.filter(p => 
+        p.title.toLowerCase().includes(key) || p.tags.some(t=>t.toLowerCase().includes(key))
+      );
+
+        document.getElementById('count').innerText = list.length + " 件梦幻单品";
+
+        // 分页计算
+      const totalPage = Math.ceil(list.length / pageSize);
+      const start = (currentPage - 1) * pageSize;
+      const end = start + pageSize;
+      const pageData = list.slice(start, end);
+
+        let html = '';
+        pageData.forEach(p => {
+            let tags = p.tags.map(t=>`<span class="tag">${t}</span>`).join('');
+    html += `
+    <div class="product-card" data-id="${p.id}">
+      <div class="product-img"><img src="${p.img}"></div>
+      <div class="product-code">${p.code}</div>
+      <div class="product-title">${p.title}</div>
+      <div class="tags">${tags}</div>
+      <div class="product-price">¥${p.price}</div>
+    </div>`;
+    });
+    grid.innerHTML = html;
+    renderPagination(totalPage);
+    }
+
+    // 渲染分页按钮
+    function renderPagination(totalPage) {
+        pagination.innerHTML = '';
+        for(let i=1; i<=totalPage; i++) {
+          let btn = document.createElement('button');
+          btn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+    btn.innerText = i;
+    btn.onclick = () => {
+        currentPage = i;
+    render();
+    };
+    pagination.appendChild(btn);
+    }
+    }
+
+    // 渲染购物车
+    function renderCart() {
+        if (cart.length === 0) {
+            cartList.innerHTML = "<div style='color:#999;text-align:center;padding:10px'>购物车是空的哦～</div>";
+            cartTotal.innerText = "合计：¥0";
+            return;
+        }
+        let html = "";
+        let total = 0;
+        cart.forEach((item, index) => {
+            const subtotal = item.price * item.quantity;
+        total += subtotal;
+        html += `
+          <div class="cart-item">
+            <div class="cart-name">
+              ${item.title} <span class="cart-size">${item.size}码</span>
+            </div>
+            <div class="cart-quantity">
+              <button onclick="changeQuantity(${index},-1)">-</button>
+              <span>${item.quantity}</span>
+              <button onclick="changeQuantity(${index},1)">+</button>
+            </div>
+            <div>¥${subtotal}</div>
+          </div>`;
+    });
+    cartList.innerHTML = html;
+    cartTotal.innerText = `合计：¥${total}`;
+    }
+
+    // 数量修改
+    function changeQuantity(index, num) {
+        cart[index].quantity += num;
+        if (cart[index].quantity < 1) cart.splice(index, 1);
+        renderCart();
+    }
+
+    // 结算
+    checkoutBtn.onclick = () => {
+        if (cart.length === 0) {
+      alert("🛒 购物车是空的，请先添加商品！");
+    return;
+    }
+    alert("✅ 结算成功！感谢购买蔷薇誓约Lolita～");
+    cart = [];
+    renderCart();
+    };
+
+    // 打开商品弹窗
+    grid.addEventListener('click', e => {
+        const card = e.target.closest('.product-card');
+    if (!card) return;
+    const id = +card.dataset.id;
+    const p = productsData.find(x=>x.id===id);
+
+    document.getElementById('modalImg').innerHTML = `<img src="${p.img}">`;
+    document.getElementById('modalCode').innerText = p.code;
+    document.getElementById('modalTitle').innerText = p.title;
+    document.getElementById('modalTags').innerHTML = p.tags.map(t=>`<span class="modal-tag">${t}</span>`).join('');
+    document.getElementById('modalDesc').innerText = p.desc;
+    document.getElementById('modalPrice').innerText = `¥${p.price}`;
+    
+    let sizeOpt = p.sizes.map(s=>`<option value="${s}">${s}码</option>`).join('');
+    document.getElementById('modalSize').innerHTML = sizeOpt;
+    modal.style.display = 'flex';
+    });
+
+    closeModal.onclick = () => modal.style.display = 'none';
+
+    // 加入购物车
+    document.getElementById('addCartBtn').onclick = () => {
+        const title = document.getElementById('modalTitle').innerText;
+    const size = document.getElementById('modalSize').value;
+    const price = parseInt(document.getElementById('modalPrice').innerText.replace('¥', ''));
+    
+    const exist = cart.find(i => i.title === title && i.size === size);
+    if (exist) exist.quantity++;
+    else cart.push({ title, size, price, quantity: 1 });
+    
+    renderCart();
+    alert('✅ 已加入购物车！');
+    modal.style.display = 'none';
+    };
+
+    document.getElementById('searchBtn').onclick = render;
+    document.getElementById('search').oninput = () => {
+        currentPage = 1;
+    render();
+    };
+
+    render();
+    renderCart();
+</script>
+</body>
+</html>
